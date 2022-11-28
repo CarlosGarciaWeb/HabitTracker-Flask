@@ -1,56 +1,18 @@
-from flask import Flask, render_template, request, url_for, redirect
-import datetime
-from collections import defaultdict
+from flask import Flask
+from routes import pages
+from pymongo import MongoClient
+import os
 
-# TODO: (End Goal) make a habit tracker for studying languages like Python, Go, Swift and link an api service that
-# shows the weather for that particular date // add function that allows user to select periodicity of habit
+def create_app():
 
-app = Flask(__name__)
+    mongo_address = os.environ.get("MONGODB_ADDRESS")
 
-habits = ["Test Habits", "Second Habit Test"]
-completions = defaultdict(list)
+    client = MongoClient(mongo_address)
 
-@app.context_processor
-def add_calc_date_range():
-    def selectDates(startDate: datetime.date):
-        dates_list = [startDate + datetime.timedelta(days=diff) for diff in range(-3, 4)]
-        return dates_list
+    app = Flask(__name__)
+    
 
-    return {"date_range": selectDates}
+    app.db = client.flask
+    app.register_blueprint(pages)
 
-
-@app.route("/")
-def home():
-    dates_string = request.args.get("date")
-    if dates_string:
-        selected_date = datetime.date.fromisoformat(dates_string)
-    else:
-        selected_date = datetime.date.today()
-    return render_template(
-        "index.html",
-        habits=habits,title="Habit Tracker - Home", 
-        completions=completions[selected_date],
-        selected_date=selected_date
-    )
-
-
-
-@app.route("/add-habit", methods=["GET","POST"])
-def add_habit():
-    if request.method == "POST":
-        habits.append(request.form.get("habit"))
-        return redirect(url_for('home'))
-    return render_template("add_habits.html", title="Add Habit", selected_date=datetime.date.today())
-
-
-
-
-@app.route("/completed", methods=["POST"])
-def complete():
-    date_string = request.form.get("date")
-    habit = request.form.get("habitName")
-    date = datetime.date.fromisoformat(date_string)
-
-    completions[date].append(habit)
-
-    return redirect(url_for('home', date=date_string))
+    return app
