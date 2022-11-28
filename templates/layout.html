@@ -17,6 +17,16 @@
         {% endif %}
     </header>
     <main class="main">
+        <section class="dates">
+            {% for dates in date_range(selected_date) %}
+                <a class="dates__link {{ 'dates__link--current' if loop.index0 == 3 else '' }}" href="{{ url_for('home', date=dates) }}">
+                    <time class="date" datetime="{{dates}}">
+                        <span>{{ dates.strftime("%a") }}</span>
+                        <span>{{ dates.strftime("%d") }}</span>
+                    </time>
+                </a>
+            {% endfor %}
+        </section>
         {% block main_content %}
         {% endblock %}
     </main>
