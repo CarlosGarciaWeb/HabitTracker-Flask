@@ -134,3 +134,53 @@ body {
 		display: block;
 	}
 }
+
+
+.habit {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 1.8rem;
+	padding: 1.4rem;
+	margin-bottom: 1rem;
+	background-color: #FEFCF3;
+	border: 3px solid #222222;
+	border-radius: 6px;
+}
+
+.habit:not(.completed) {
+	padding: 0;
+}
+
+.habit:not(.completed):hover {
+	background-color: #8B7E74;
+}
+
+
+.habit__icon {
+	width: 1em;
+	height: 1em;
+}
+
+
+.habit__name {
+	margin: 0;
+}
+
+.habit__form {
+	width: 100%;
+
+}
+
+.habit__button {
+	display: block;
+	width: 100%;
+	padding: 1.4rem;
+	font-size: inherit;
+	font-family: inherit;
+	text-align: left;
+	border: none;
+	background-color: unset;
+	cursor: pointer;
+}
