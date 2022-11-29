@@ -34,7 +34,7 @@ def home():
     else:
         selected_date = today_midnight()
 
-    habits_onDate = current_app.habitTracker.find({"added_date": {"$lte": selected_date}})
+    habits_onDate = current_app.db.habitTracker.find({"added_date": {"$lte": selected_date}})
 
     completions = [habit["habit"] for habit in current_app.db.completions.find({"date": selected_date})]
 
@@ -42,7 +42,7 @@ def home():
         "index.html",
         habits=habits_onDate,
         title="Habit Tracker - Home", 
-        completions=completions[selected_date],
+        completions=completions,
         selected_date=selected_date
     )
 
